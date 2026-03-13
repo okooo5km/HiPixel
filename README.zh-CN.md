@@ -178,6 +178,14 @@ done
   </a>
 </p>
 
+#### 通过 Homebrew 安装
+
+```bash
+brew install okooo5km/tap/hipixel
+```
+
+#### 手动下载
+
 1. 访问 [hipixel.5km.tech](https://hipixel.5km.tech) 下载最新版本
 2. 将 HiPixel.app 移动到应用程序文件夹
 3. 启动 HiPixel

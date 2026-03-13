@@ -178,6 +178,14 @@ done
   </a>
 </p>
 
+#### Via Homebrew
+
+```bash
+brew install okooo5km/tap/hipixel
+```
+
+#### Manual Download
+
 1. Visit [hipixel.5km.tech](https://hipixel.5km.tech) to download the latest version
 2. Move HiPixel.app to your Applications folder
 3. Launch HiPixel
