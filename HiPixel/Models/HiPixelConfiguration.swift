@@ -35,6 +35,7 @@ struct HiPixelConfiguration {
         static let HideDockIcon = "HIPixel-HideDockIcon"
         static let ShowMenuBarExtra = "HIPixel-ShowMenuBarExtra"
         static let LaunchSilently = "HIPixel-LaunchSilently"
+        static let HasShownAutoSaveHint = "HIPixel-HasShownAutoSaveHint"
     }
 
     enum ColorScheme: String, CaseIterable {
@@ -176,7 +177,7 @@ struct HiPixelConfiguration {
     var colorScheme: ColorScheme = .system
 
     @AppStorage(Keys.NotificationMode)
-    var notification: NotificationMode = .None
+    var notification: NotificationMode = .HiPixel
 
     @AppStorage(Keys.SaveImageAs)
     var saveImageAs: ImageFormat = .original
@@ -224,7 +225,10 @@ struct HiPixelConfiguration {
     var selectedCustomModel: String?
 
     @AppStorage(Keys.ManualSaveControl)
-    var manualSaveControl: Bool = false
+    var manualSaveControl: Bool = true
+
+    @AppStorage(Keys.HasShownAutoSaveHint)
+    var hasShownAutoSaveHint: Bool = false
 
     @AppStorage(Keys.HideDockIcon)
     var hideDockIcon: Bool = false
@@ -262,7 +266,9 @@ struct HiPixelConfiguration {
         enableTTA = false
         upscaleModel = .Upscayl_Standard
         selectedCustomModel = nil
-        manualSaveControl = false
+        notification = .HiPixel
+        manualSaveControl = true
+        hasShownAutoSaveHint = false
         hideDockIcon = false
         showMenuBarExtra = false
         launchSilently = false

@@ -14,7 +14,7 @@ struct ContentView: View, DropDelegate {
     var colorScheme: HiPixelConfiguration.ColorScheme = .system
 
     @AppStorage(HiPixelConfiguration.Keys.ManualSaveControl)
-    var manualSaveControl: Bool = false
+    var manualSaveControl: Bool = true
 
     @State var isOptionsPresented: Bool = false
 
@@ -27,6 +27,7 @@ struct ContentView: View, DropDelegate {
 
     @State private var item: UpscaylDataItem? = nil
     @State private var showResourceDownloadSheet = false
+    @State private var showAutoSaveHint = false
 
     @StateObject private var resourceDownloadManager = ResourceDownloadManager.shared
     @EnvironmentObject var upscaylData: UpscaylData
@@ -392,6 +393,9 @@ struct ContentView: View, DropDelegate {
         .sheet(isPresented: $showResourceDownloadSheet) {
             ResourceDownloadSheet()
         }
+        .sheet(isPresented: $showAutoSaveHint) {
+            AutoSaveHintSheet(isPresented: $showAutoSaveHint)
+        }
         .onChange(of: resourceDownloadManager.downloadState) { state in
             // Auto-dismiss sheet when download is completed
             if case .completed = state {
@@ -523,6 +527,11 @@ struct ContentView: View, DropDelegate {
                 do {
                     // Copy file from temporary location to user-selected location
                     try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
+                    // First save success — show auto-save hint if not shown before
+                    if !HiPixelConfiguration.shared.hasShownAutoSaveHint {
+                        HiPixelConfiguration.shared.hasShownAutoSaveHint = true
+                        showAutoSaveHint = true
+                    }
                 } catch {
                     Common.logger.error("Failed to save image: \(error)")
                 }

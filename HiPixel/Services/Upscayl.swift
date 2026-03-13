@@ -419,11 +419,41 @@ enum Upscayl {
         }
 
         group.notify(queue: DispatchQueue.main) {
-            // Note: Notification mode is not part of options as it's a global setting
             if HiPixelConfiguration.shared.notification != .None {
-                NotificationX.push(
-                    message: String(
-                        format: NSLocalizedString("Upscale completed: %d images", comment: ""), signURLs.count))
+                let isManualSave = effectiveOptions.resolvedManualSaveControl && source == .userDirect
+
+                let message: String
+                if isManualSave {
+                    message = String(
+                        format: NSLocalizedString("Upscale completed: %d images", comment: ""),
+                        signURLs.count
+                    )
+                } else if effectiveOptions.resolvedEnableSaveOutputFolder,
+                          let folderPath = effectiveOptions.resolvedSaveOutputFolder {
+                    message = String(
+                        format: NSLocalizedString("Upscale completed: %d images, saved to %@", comment: ""),
+                        signURLs.count,
+                        (folderPath as NSString).lastPathComponent
+                    )
+                } else {
+                    let uniqueDirs = Set(signURLs.map {
+                        $0.url.deletingLastPathComponent().lastPathComponent
+                    })
+                    if uniqueDirs.count == 1, let dirName = uniqueDirs.first {
+                        message = String(
+                            format: NSLocalizedString("Upscale completed: %d images, saved to %@", comment: ""),
+                            signURLs.count,
+                            dirName
+                        )
+                    } else {
+                        message = String(
+                            format: NSLocalizedString("Upscale completed: %d images, saved to source directories", comment: ""),
+                            signURLs.count
+                        )
+                    }
+                }
+
+                NotificationX.push(message: message)
             }
         }
     }
