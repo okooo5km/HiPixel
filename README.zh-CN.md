@@ -19,7 +19,7 @@
 <h1 align="center">HiPixel</h1>
 
 <p align="center">
-  <a href="https://github.com/yourusername/hipixel/blob/main/LICENSE">
+  <a href="https://github.com/okooo5km/HiPixel/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" alt="License: AGPL v3" style="border-radius: 8px;">
   </a>
   <a href="https://developer.apple.com/swift">
@@ -49,12 +49,33 @@ HiPixel 是一款原生 macOS 应用程序，用于 AI 图像超分辨率处理�
 
 ## ✨ 功能特点
 
-- 🖥️ 原生 macOS 应用程序，使用 SwiftUI 界面
-- 🎨 使用 AI 模型进行高质量图像放大
-- 🚀 GPU 加速，处理速度快
-- 🖼️ 支持多种图像格式
-- 📁 文件夹监控功能，自动处理新增图像
-- 💻 现代化直观的用户界面
+### 🧠 AI 处理能力
+
+- 🎨 四个内置 AI 模型：Standard、Lite、High Fidelity、Digital Art
+- 📦 自定义模型支持——从本地文件夹加载你自己的模型
+- ✨ 双重放大（Double Processing）——一次任务连续放大两次，获得更高有效分辨率
+- 🔬 可选 TTA（测试时增强），进一步提升画质
+- 📷 EXIF 元数据保留——相机信息和方向信息在放大后依然保留
+- 🚀 GPU 加速，支持手动选择 GPU 和自定义图块大小
+
+### ⚡ 工作流与自动化
+
+- 🖱️ 拖放即处理——图像拖入后自动开始处理
+- 🗂️ 批量处理，可同时处理多张图像
+- 📁 文件夹监控——自动处理添加到指定文件夹中的新图像
+- 🔗 URL Scheme（`hipixel://`），支持完整处理参数，方便脚本与第三方集成
+- ⚙️ Apple 快捷指令集成——通过"放大图像"操作实现自动化
+- 🗜️ Zipic 联动，放大后智能压缩
+
+### 🖥️ 界面与体验
+
+- 🖥️ 使用 SwiftUI 构建的原生 macOS 应用
+- 🔍 图像对比查看器，支持缩放（1x–5x）、平移和一键重新处理
+- 💾 手动或自动保存——可先确认效果再保存，也可自动保存
+- 📌 菜单栏快捷入口，支持隐藏 Dock 图标和静默启动
+- 🔔 三种通知样式：HiPixel 横幅、刘海屏样式、系统通知
+- 🖼️ 输出格式支持 PNG、JPG、WebP 或保持原格式
+- 🌓 浅色/深色外观与备选应用图标
 
 ### 💡 为什么选择 HiPixel？
 
@@ -72,6 +93,35 @@ HiPixel 是一款原生 macOS 应用程序，用于 AI 图像超分辨率处理�
    - 简化界面，专注于最常用的功能，使得图像放大过程更加直接
 
 HiPixel 旨在通过提供一种专注于工作流效率和原生 macOS 集成的替代方法来补充 Upscayl，同时建立在 Upscayl 优秀的 AI 图像放大基础之上。
+
+### 🧠 AI 模型
+
+HiPixel 内置四个来自 Upscayl 的模型：
+
+| 模型 | ID | 适用场景 |
+|------|-----|---------|
+| Standard | `upscayl-standard-4x` | 照片等通用图像放大 |
+| Lite | `upscayl-lite-4x` | 更快的处理速度，更低的资源占用 |
+| High Fidelity | `high-fidelity-4x` | 最大程度保留细节 |
+| Digital Art | `digital-art-4x` | 插画、动漫和数字艺术作品 |
+
+#### 自定义模型
+
+除内置模型外，你还可以加载自己的模型：
+
+1. 将模型文件放入一个文件夹——每个模型由一对同名的 `<name>.bin` 和 `<name>.param` 文件组成（ncnn 格式，与 Upscayl 使用的格式相同）
+2. 在设置中选择该文件夹（也可通过 URL 参数 `customModelsFolder` 指定）
+3. 在模型列表中选择自定义模型
+
+当同时指定内置模型和自定义模型时，自定义模型优先。
+
+#### 按需下载资源
+
+为了减小安装包体积，HiPixel 会在首次启动时从网络下载 upscayl-bin 和 AI 模型：
+
+- 所有下载均通过 SHA256 校验完整性
+- 资源存储在 `~/Library/Application Support/hipixel/`
+- 启动时自动检查资源更新，也可在设置的"高级"标签页中手动检查
 
 ### 🔗 URL Scheme 使用说明
 
@@ -170,6 +220,10 @@ done
 - 当同时指定 `upscaylModel` 和 `selectedCustomModel` 时，`selectedCustomModel` 优先。
 - 如果 `enableSaveOutputFolder=true` 但未提供 `saveOutputFolder`，输出将保存在源图像所在的目录中。
 
+### ⚙️ 快捷指令集成
+
+HiPixel 通过 App Intents 框架支持 Apple 快捷指令。在"快捷指令"App 中添加 **"放大图像"（Upscale Images）** 操作即可搭建自己的自动化流程——每个快捷指令都可以单独配置全部处理选项，包括 AI 模型（内置或自定义）、放大倍数、输出格式、输出文件夹、压缩级别、双重放大和 TTA。
+
 ### 🚀 安装方法
 
 <p align="center">
@@ -245,8 +299,8 @@ HiPixel 采用 GNU Affero 通用公共许可证第3版 (AGPLv3) 授权。这意�
 
 HiPixel 使用了以下来自 [Upscayl](https://github.com/upscayl/upscayl) 的组件：
 
-- upscayl-bin - AI 超分辨率处理工具
-- AI Models - 图像超分辨率模型
+- upscayl-bin - AI 超分辨率处理工具（AGPLv3）
+- AI Models - 图像超分辨率模型（AGPLv3）
 
 特别感谢 [zaotang.xyz](https://zaotang.xyz) 为 HiPixel v0.2 版本设计了全新的应用图标和主窗口交互界面。
 

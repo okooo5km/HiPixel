@@ -19,7 +19,7 @@ Using my apps is also a way to [support me](https://5km.tech):
 <h1 align="center">HiPixel</h1>
 
 <p align="center">
-  <a href="https://github.com/yourusername/hipixel/blob/main/LICENSE">
+  <a href="https://github.com/okooo5km/HiPixel/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-AGPL%20v3-blue.svg" alt="License: AGPL v3" style="border-radius: 8px;">
   </a>
   <a href="https://developer.apple.com/swift">
@@ -49,12 +49,33 @@ HiPixel is a native macOS application for AI-powered image super-resolution, bui
 
 ## ✨ Features
 
-- 🖥️ Native macOS application with SwiftUI interface
-- 🎨 High-quality image upscaling using AI models
-- 🚀 Fast processing with GPU acceleration
-- 🖼️ Supports various image formats
-- 📁 Folder monitoring for automatic processing of newly added images
-- 💻 Modern, intuitive user interface
+### 🧠 AI Processing
+
+- 🎨 Four built-in AI models: Standard, Lite, High Fidelity, and Digital Art
+- 📦 Custom model support — load your own models from a local folder
+- ✨ Double Processing — upscale twice in one pass for higher effective resolution
+- 🔬 Optional TTA (Test-Time Augmentation) for even better quality
+- 📷 EXIF metadata preservation — camera and orientation info survives upscaling
+- 🚀 GPU acceleration with manual GPU selection and custom tile size
+
+### ⚡ Workflow & Automation
+
+- 🖱️ Drag-and-drop processing — images are processed automatically upon dropping
+- 🗂️ Batch processing for multiple images at once
+- 📁 Folder monitoring — new images added to designated folders are processed automatically
+- 🔗 URL Scheme (`hipixel://`) with full processing options for scripts and third-party integration
+- ⚙️ Apple Shortcuts integration — automate upscaling with the "Upscale Images" action
+- 🗜️ Zipic integration for smart compression after upscaling
+
+### 🖥️ Interface & Experience
+
+- 🖥️ Native macOS application built with SwiftUI
+- 🔍 Image comparison viewer with zoom (1x–5x), pan, and one-click reprocessing
+- 💾 Manual or automatic saving — review results before saving, or save automatically
+- 📌 Menu bar access with optional Dock icon hiding and silent launch
+- 🔔 Three notification styles: HiPixel banner, notch-style, or system notifications
+- 🖼️ Output as PNG, JPG, WebP, or the original format
+- 🌓 Light/dark appearance and alternate app icon
 
 ### 💡 Why HiPixel?
 
@@ -72,6 +93,35 @@ While [Upscayl](https://github.com/upscayl/upscayl) already offers an excellent 
    - Simplified interface focusing on the most commonly used features, making the upscaling process more straightforward
 
 HiPixel aims to complement Upscayl by offering an alternative approach focused on workflow efficiency and native macOS integration, while building upon Upscayl's excellent AI upscaling foundation.
+
+### 🧠 AI Models
+
+HiPixel ships with four built-in models from Upscayl:
+
+| Model | ID | Best For |
+|-------|-----|----------|
+| Standard | `upscayl-standard-4x` | General-purpose upscaling for photos |
+| Lite | `upscayl-lite-4x` | Faster processing with lower resource usage |
+| High Fidelity | `high-fidelity-4x` | Maximum detail preservation |
+| Digital Art | `digital-art-4x` | Illustrations, anime, and digital artwork |
+
+#### Custom Models
+
+Beyond the built-in models, you can load your own:
+
+1. Put your model files in a folder — each model is a pair of `<name>.bin` and `<name>.param` files (ncnn format, the same format Upscayl uses)
+2. Select this folder in Settings (or pass it via the `customModelsFolder` URL parameter)
+3. Pick the custom model from the model list
+
+When both a built-in and a custom model are specified, the custom model takes precedence.
+
+#### On-Demand Resource Download
+
+To keep the app download small, HiPixel fetches upscayl-bin and the AI models over the network on first launch:
+
+- All downloads are verified with SHA256 checksums
+- Resources are stored in `~/Library/Application Support/hipixel/`
+- Updates are checked automatically at launch; a manual check is available in the Advanced settings tab
 
 ### 🔗 URL Scheme Support
 
@@ -169,6 +219,10 @@ done
 - File paths and folder paths containing special characters should be URL encoded.
 - When both `upscaylModel` and `selectedCustomModel` are specified, `selectedCustomModel` takes precedence.
 - If `enableSaveOutputFolder=true` but `saveOutputFolder` is not provided, the output will be saved in the same directory as the source image.
+
+### ⚙️ Shortcuts Integration
+
+HiPixel supports Apple Shortcuts via the App Intents framework. Add the **"Upscale Images"** action in the Shortcuts app to build your own automation — every processing option is configurable per shortcut, including AI model (built-in or custom), scale factor, output format, output folder, compression, double processing, and TTA.
 
 ### 🚀 Installation
 
