@@ -42,20 +42,28 @@ struct StripedBackground: View {
     var highlighted: Bool
     var showsDashedBorder: Bool = false
 
+    private static let transition = Animation.easeInOut(duration: 0.25)
+
     var body: some View {
+        // Opacity is applied as a view modifier (not baked into the fill style) so the
+        // highlight change interpolates instead of snapping.
         ZStack {
             RoundedRectangle(cornerRadius: cornerRadius)
-                .fill(.background.opacity(highlighted ? 0.7 : 0.8))
+                .fill(.background)
+                .opacity(highlighted ? 0.7 : 0.8)
 
             StripesShape()
-                .fill(.background.opacity(highlighted ? 0.5 : 0.4))
+                .fill(.background)
+                .opacity(highlighted ? 0.5 : 0.4)
                 .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
 
             if showsDashedBorder {
                 RoundedRectangle(cornerRadius: cornerRadius)
                     .stroke(style: StrokeStyle(lineWidth: 2, dash: [4, 4]))
-                    .foregroundStyle(.primary.opacity(highlighted ? 0.24 : 0.12))
+                    .foregroundStyle(.primary)
+                    .opacity(highlighted ? 0.24 : 0.12)
             }
         }
+        .animation(Self.transition, value: highlighted)
     }
 }

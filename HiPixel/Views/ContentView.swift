@@ -469,7 +469,14 @@ private struct EmptyDropZoneView: View {
     var body: some View {
         VStack {
             ZStack {
-                Image(isActive ? .hipixelboard2 : .hipixelboard1)
+                // Both boards stay in the hierarchy and cross-fade
+                ZStack {
+                    Image(.hipixelboard1)
+                        .opacity(isActive ? 0 : 1)
+                    Image(.hipixelboard2)
+                        .opacity(isActive ? 1 : 0)
+                }
+                .animation(Self.fade, value: isActive)
 
                 Image(.magicbar)
                     .scaleEffect(0.92)
@@ -496,6 +503,7 @@ private struct EmptyDropZoneView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .foregroundStyle(isActive ? .primary : .secondary)
+        .animation(Self.fade, value: isActive)
         .overlay(alignment: .bottom) {
             Text("AI Image Upscaler Wrapping **[Upscayl](https://github.com/upscayl/upscayl)**")
                 .font(.caption)
@@ -503,7 +511,7 @@ private struct EmptyDropZoneView: View {
                 .padding(12)
         }
         .background {
-            StripedBackground(cornerRadius: cornerRadius, highlighted: hovering, showsDashedBorder: true)
+            StripedBackground(cornerRadius: cornerRadius, highlighted: isActive, showsDashedBorder: true)
         }
     }
 }
